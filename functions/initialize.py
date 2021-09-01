@@ -34,7 +34,7 @@ def initialize_positions(M, num_var=2):
                 continue
             feasible = True
         population.append(x)
-    return population
+    return np.array(population)
 
 
 def rand_integer(r):
@@ -43,8 +43,9 @@ def rand_integer(r):
 def generate_solution(n=2, randmax=10):
     return  [randmax * random.random() for _ in range(n)]
     
-def random_vector(a=0.0001, n=2):
-    return [a if random.random() < 0.5 else -1.0 * a for _ in range(n)]
+def deltas(population, a, p=0.5):
+    randoms = np.random.random(population.shape)
+    return np.where(randoms < p, a, -a)
 
 
 def pseudogradient_function(x, deltax):

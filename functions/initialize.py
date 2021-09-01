@@ -1,8 +1,17 @@
+import math
 import random
 import numpy as np
 
+
 random.seed(3)
 RAND_MAX = 10
+
+def objective(x):
+    numerator = math.sin(2 + math.pi * x[0]) ** 3 * math.sin(2 * math.pi * x[0])
+    denominator = x[0] ** 3 * (x[0] + x[1])
+    return numerator / denominator 
+
+
 
 def constraint1(x1, x2):
     return x1 ** 2 - x2 + 1 
@@ -34,7 +43,7 @@ def rand_integer(r):
 def generate_solution(n=2, randmax=10):
     return  [randmax * random.random() for _ in range(n)]
     
-def random_vector(a, n=2):
+def random_vector(a=0.0001, n=2):
     return [a if random.random() < 0.5 else -1.0 * a for _ in range(n)]
 
 

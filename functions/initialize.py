@@ -34,7 +34,7 @@ def constraint1(x):
 
 def constraint2(x):
     x1, x2 = x
-    return 1 - x1  + (x2 - 4) ** 2 <= 0
+    return 1 - x1 + (x2 - 4) ** 2 <= 0
 
 
 def feasible_solution(num_var=2, randmax=10):
@@ -45,7 +45,7 @@ def feasible_solution(num_var=2, randmax=10):
         Number of independent variables
     randmax: int
         Max interval
-    
+
     Returns
     --------
     x: numpy ndarray
@@ -54,15 +54,17 @@ def feasible_solution(num_var=2, randmax=10):
     feasible = False
     while not feasible:
         x = [randmax * random.random() for _ in range(num_var)]
-        feasible = test_constraints(x, constraint1, constraint2)     
+        feasible = test_constraints(x, constraint1, constraint2)
     return x
+
 
 def generate_solution(randmax=10, num_var=2):
     return [randmax * random.random() for _ in range(num_var)]
 
+
 def population(M):
     '''This function initialize population
-    
+
     Parameters
     ----------
     M: int
@@ -70,7 +72,7 @@ def population(M):
     num_vars: int
         Dimension of the problem. Number of variables.
     '''
-    return  np.array([feasible_solution() for _ in range(M)])
+    return np.array([feasible_solution() for _ in range(M)])
 
 
 def test_constraints(x, *constraints):
@@ -100,31 +102,31 @@ def climbing():
         Step length
     p = float
     '''
-    i,j = monkeys.shape
+    i, j = monkeys.shape
     for c in range(Nc):
-        for i,monkey in enumerate(monkeys):
+        for i, monkey in enumerate(monkeys):
             r = np.random.random(j)
             delta = np.where(r < 0.5, a, -a)
             f1 = objective_function(monkey + delta)
             f2 = objective_function(monkey - delta)
-            f =  np.divide(f1 - f2, 2 * delta)
+            f = np.divide(f1 - f2, 2 * delta)
             y = monkey + a * np.sign(f)
             if test_constraints(y, constraint1, constraint2):
-                monkeys[i] = y        
-    
+                monkeys[i] = y
+
+
 def watch():
     '''Watch Process
     monkeys: numpy ndarray
         Population of m monkeys
     '''
-    for i,monkey in enumerate(monkeys):
+    for i, monkey in enumerate(monkeys):
         feasible = False
         while not feasible:
-            y = np.array([random.uniform(x - b, x + b) for x in monkey])            
+            y = np.array([random.uniform(x - b, x + b) for x in monkey])
             feasible = test_constraints(y, constraint1, constraint2)
         if objective_function(y) >= objective_function(monkey):
             monkeys[i] = y
-    
 
 
 def somersault():
@@ -134,15 +136,14 @@ def somersault():
     c, d: int
         Somersault Interval
     '''
-    somersault_pivot = monkeys.mean(axis=0) # mean by columns
+    somersault_pivot = monkeys.mean(axis=0)  # mean by columns
     for i, monkey in enumerate(monkeys):
         feasible = False
         while not feasible:
-            y = [x + random.uniform(c, d) * (p - x) for x, p in zip(monkey, somersault_pivot)]
+            y = [x + random.uniform(c, d) * (p - x)
+                 for x, p in zip(monkey, somersault_pivot)]
             feasible = test_constraints(y, constraint1, constraint2)
         monkeys[i] = y
-    
-
 
 
 def monkey_algorithm():
@@ -159,9 +160,10 @@ def monkey_algorithm():
         # print(f'Iteration no: {iteration + 1}. Best value: {z}')
         fvalues.append(z)
     return z
-    
 
     pass
+
+
 if __name__ == '__main__':
     N = 10  # Whole Iterations
     M = 5   # Monkeys
@@ -175,14 +177,8 @@ if __name__ == '__main__':
         monkeys = population(M)
         results.append(monkey_algorithm())
         print(f'Trial number: { trial + 1}')
-    print('Results')    
+    print('Results')
     pprint(results)
     print(f'Mean: {statistics.mean(results)}')
     print(f'Variance: {statistics.variance(results)}')
     print(f'StdDev: {statistics.stdev(results)}')
-
-
-    
-
-
-
